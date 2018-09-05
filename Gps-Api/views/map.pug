@@ -1,0 +1,262 @@
+doctype html
+html
+  head
+    meta(http-equiv='content-type', content='text/html; charset=UTF-8')
+    title GPS APP Telematica
+    link(rel='stylesheet', type='text/css', href='/bower_components/bootstrap/dist/css/bootstrap.css') 
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js')
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBmdhVJcwT22Ew26tMfpHIQTO1RJ2GjduE')
+  body
+    h1.display-4.m-b-2 Rutas Gps
+    hr
+    table.table.table-borderless
+      thead
+        tr
+          label#minutes 
+          |
+          label#seconds 
+        tr
+          th(scope='col') Mapa
+          th(scope='col') Opciones
+      tbody
+        tr
+          td(rowspan='6')
+            #map(style='width: 800px; height: 400px;')
+          td
+            div.btn-group-vertical
+              button#iniciar.btn.btn-primary(onclick="updateGps('true')") Iniciar Ruta
+              button#finalizar.btn.btn-success(onclick="updateGps('false')") Finalizar Ruta
+        tr
+          td      
+            div.btn-group-vertical  
+              button.btn.btn-info Rutas guardadas:
+                span#routesQuantity.badge= routes.length
+            ul#routesList.list-group(style='width: 400px; height: 250px; overflow: auto')
+              for route in routes
+                li.list-group-item= route.id
+                  select(id = route.id multiple='' hidden)
+                    for point in route.points
+                      option= [point.lat,point.lon]
+                  button.btn.btn-success( onclick=`addMarkers(${JSON.stringify(route.id)})` ) Ver
+            button.btn.btn-dark(onclick='/') Salir
+    br
+    h6 #{message} 
+    p#token(hidden) #{token}
+    p#userId(hidden) #{userId}
+    script(type='text/javascript').
+      var body = document.getElementsByTagName("body")[0];
+      body.addEventListener("load", initMap(), false);
+      var map, rutaBase, timerGps, jsonRequestMessage, jwtoken, userId, minutesLabel, secondsLabel, i;
+      var markers = [];
+      var userRoutes = [];
+      var positionsArray = [];
+      var totalSeconds = 0;
+      //-------------------------------------------------------------------------
+      /* Función para instanciar un mapa de Google maps 
+         con centro en la ciudad de Medellín, Colombia
+      */
+      function initMap(){
+        map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 12,
+        center: new google.maps.LatLng(6.2691, -75.5761),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        userId = document.getElementById('userId').textContent;
+        jwtoken = document.getElementById('token').textContent;
+      }
+      //-------------------------------------------------------------------------
+      // Funcion para pintar marcadores de rutas
+      function addMarkers(idRoute){
+        // Se eliminan primero posibles marcadores que estén pintados en el mapa
+        deleteMarkers();
+        /* Se obtiene el elemento html(select) que contiene el objeto ruta junto a
+         sus puntos gps guardados (options del select). 
+         Se crean marcadores de google según cada punto gps y se guardan en el arreglo
+         respectivo.
+        */
+        var markersArray = document.getElementById(idRoute);
+        for (i = 0 ; i < markersArray.length ; i++){
+          var latLngPoints = markersArray[i].value.split(',')
+          var latitud = parseFloat(latLngPoints[0].replace(/\s/g,''));
+          var longitud = parseFloat(latLngPoints[1].replace(/\s/g,''));
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(latitud, longitud),
+              map: map
+            });
+          markers.push(marker);
+        }
+        // Se muestran los marcadores en el mapa
+        showMarkers();
+      }
+        /* Configura a los marcadores que estan actualmente en el arreglo (variable global)
+        *   un mapa recibido. 
+        *  Por tanto, si se recibe como null el mapa, los retira del mapa actual
+        */ 
+      function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+        }
+      }
+      // Le dice al mapa que no configure elementos sobre él
+      function clearMarkers() {
+        setMapOnAll(null);
+      }
+      // Le dice al mapa que muestre los elementos como estan a momento
+      function showMarkers() {
+        setMapOnAll(map);
+      }
+      // Limpia el mapa y el arreglo de marcadores
+      function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+      }
+      //---------------------------------------------------------------------------
+      // Función para la gestión de rutas desde el front end
+      function updateGps(option){
+          minutesLabel = document.getElementById("minutes");
+          secondsLabel = document.getElementById("seconds");
+      // Si option es true es porque se inició una ruta, caso contrario porque se finalizó 
+        if(option === 'true'){
+          // Se inicializa vacío el arreglo de puntos para la nueva ruta iniciada
+          positionsArray = [];
+          // Se construye json base para enviarse al endpoint de crear ruta
+          var fecha = moment(new Date()).format("MM/DD/YYYY");
+          jsonRequestMessage = {
+            'fecha': fecha,
+            'user' : userId
+          };
+          // Se construye request
+          var xmlHttpRequest = new XMLHttpRequest();
+          xmlHttpRequest.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              var obj = JSON.parse(this.responseText);
+              /* El json que se obtendrá en el response es la ruta creada en la bd sin puntos (ruta vacía)
+               * Se guarda esta ruta para modificarse posteriormente con los puntos que se capturen
+              */
+              exportObjectRutaBase(obj);
+            }
+          };
+          // Se envía el request asociándosele el token de seguridad
+          xmlHttpRequest.open("POST", "/api/route", true);
+          xmlHttpRequest.setRequestHeader("Content-type", "application/json");
+          xmlHttpRequest.setRequestHeader('Authorization', jwtoken);
+          xmlHttpRequest.send(JSON.stringify(jsonRequestMessage));
+          // Se establece un timer para que cada segundo guarde la posición gps del usuario      
+          totalSeconds = 0;
+          timerGps = setInterval(function(){ getPosition(); setTime();  }, 1000);
+        }else{
+          // Se da stop el timer
+          clearInterval(timerGps);
+          updateRoutesUser();
+        }
+      }
+      //-----------------------------------------------------------------------------------------
+      // Función para obtener la posición del usaurio y llamar a que esta sea guardada
+      function getPosition(){
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(savePosition);
+        } else { 
+          console.log("Geolocation is not supported by this browser.");
+        }
+      }
+      // Función para guardar la posición en el arreglo de posiciones
+      function savePosition(position) {
+        //console.log('pushiando ' + position.coords.latitude + ' , ' + position.coords.longitude);
+        positionsArray.push({lat: position.coords.latitude, lon: position.coords.longitude});
+        // Se actualiza el arreglo de puntos cada vez
+        rutaBase['route']['points'] = positionsArray;
+        // Se construye request para actualizar la ruta en base de datos
+        var xmlHttpRequest = new XMLHttpRequest();
+        // se envía el request al endpoint de actualizar la ruta
+        xmlHttpRequest.open("PUT", "/api/route/" + rutaBase['route']['_id'], true);
+        xmlHttpRequest.setRequestHeader("Content-type", "application/json");
+        xmlHttpRequest.setRequestHeader('Authorization', jwtoken);
+        xmlHttpRequest.send(JSON.stringify(rutaBase));
+      }
+      //------------------------------------------------------------------------------------
+      // Función que asigna el objeto recibido a la variable global ruta base
+      function exportObjectRutaBase(obj){
+        rutaBase = obj;
+      }
+      //--------------------------------------------------------------------------------------------
+      /* Función para mostrar mensaje que indica al usuario que la ruta ya ha iniciado
+       * muestra el tiempo transcurrido de grabación de la ruta
+      */
+      function setTime() {
+        ++totalSeconds;
+        minutesLabel.innerHTML = pad('Tu recorrido esta siendo registrado. Tiempo transcurrido ' + parseInt(totalSeconds / 60) + ':');
+        secondsLabel.innerHTML = pad(totalSeconds % 60);
+      }
+      // Función para agregar un 0 a la izquierda en el reloj cuando el dígito es menor a 10
+      function pad(val) {
+        var valString = val + "";
+        if (valString.length < 2) {
+          return "0" + valString;
+        } else {
+          return valString;
+        }
+      }
+      //--------------------------------------------------------------------------------------------
+      // Función para obtener las rutas del usuario logueado en el sistema que hay en la bd
+      function updateRoutesUser(){
+        // Se construye request http
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var obj = JSON.parse(this.responseText);
+            /* El json que se obtendrá en el response es el arreglo de las rutas creadas en la bd
+              * Se guarda este para compararse posteriormente con el arreglo local
+            */
+            exportObjectUserRoutes(obj);
+          }
+        };
+        // Se envía el request a la ruta asociándosele el token de seguridad
+        xmlHttpRequest.open("GET", "/api/route/user/" + userId, true);
+        xmlHttpRequest.setRequestHeader("Content-type", "application/json");
+        xmlHttpRequest.setRequestHeader('Authorization', jwtoken);
+        xmlHttpRequest.send();       
+      }
+      // Función que asigna el objeto recibido a la variable global userRoutes
+      function exportObjectUserRoutes(obj){
+        userRoutes = obj['routes'];
+        showUserRoutes();
+      }
+      // Función para actualizar el listado de rutas de usuario en la vista
+      function showUserRoutes(){
+        // Se cuentan cuántas rutas ya se tienen en local
+        var liQuantity = document.getElementById('routesList').getElementsByTagName('li').length;
+        /* Se compara si hay diferencia entre la cantidad de rutas en local respecto a las que hay en la bd
+          * Si si, se traen las nuevas rutas a la vista local
+        */
+        if (userRoutes.length > liQuantity)
+          document.getElementById('routesQuantity').innerHTML = userRoutes.length;
+          for(i = liQuantity; i < userRoutes.length; i++ ){
+            var node = document.createElement("LI");
+            node.setAttribute("class", "list-group-item");
+            node.innerHTML = userRoutes[i]['_id'];
+            var nodeSelect = document.createElement("SELECT");
+            nodeSelect.setAttribute("id", userRoutes[i]['_id']);
+            nodeSelect.setAttribute("multiple", "");
+            nodeSelect.setAttribute("hidden", "");
+            for(j = 0; j < userRoutes[i]['points'].length; j++){
+              var nodeOption = document.createElement("OPTION");
+              nodeOption.setAttribute("value", userRoutes[i]['points'][j]['lat'] + ',' + userRoutes[i]['points'][j]['lon']);
+              nodeOption.innerHTML = userRoutes[i]['points'][j]['lat'] + ',' + userRoutes[i]['points'][j]['lon'];
+              nodeSelect.appendChild(nodeOption);
+            }
+            node.appendChild(nodeSelect);
+            var buttonRoute = document.createElement("BUTTON");
+            buttonRoute.setAttribute("class","btn btn-success");
+            buttonRoute.innerHTML = "Ver";
+            buttonRoute.setAttribute("onclick",`addMarkers(${JSON.stringify(userRoutes[i]['_id'])})`);
+            node.appendChild(buttonRoute);
+            document.getElementById('routesList').appendChild(node);
+          }
+      }
+
+
+
+
+
