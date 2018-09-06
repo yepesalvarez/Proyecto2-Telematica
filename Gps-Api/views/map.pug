@@ -163,6 +163,15 @@ html
       }
       // Función para guardar la posición en el arreglo de posiciones
       function savePosition(position) {
+        
+        var lastPoint = positionsArray.pop();
+        if(lastPoint != null){
+          var oldLat = lastPoint.lat;
+          console.log("oldLat "+oldLat);
+          console.log("lastPoint "+lastPoint);
+        }
+        positionsArray.push(lastPoint);
+        
         //console.log('pushiando ' + position.coords.latitude + ' , ' + position.coords.longitude);
         positionsArray.push({lat: position.coords.latitude, lon: position.coords.longitude});
         // Se actualiza el arreglo de puntos cada vez
