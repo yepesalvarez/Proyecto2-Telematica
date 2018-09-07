@@ -178,9 +178,10 @@ html
           }else{
             positionsArray.push(lastPoint);
           } 
+        }else{
+          //console.log('pushiando ' + position.coords.latitude + ' , ' + position.coords.longitude);
+          positionsArray.push({lat: position.coords.latitude, lon: position.coords.longitude});
         }
-        //console.log('pushiando ' + position.coords.latitude + ' , ' + position.coords.longitude);
-        positionsArray.push({lat: position.coords.latitude, lon: position.coords.longitude});
         // Se actualiza el arreglo de puntos cada vez
         rutaBase['route']['points'] = positionsArray;
         // Se construye request para actualizar la ruta en base de datos
