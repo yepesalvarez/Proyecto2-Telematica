@@ -163,6 +163,22 @@ html
       }
       // Función para guardar la posición en el arreglo de posiciones
       function savePosition(position) {
+        
+        var lastPoint = positionsArray.pop();
+        if(lastPoint != null){
+          //este es el margen minimo que uso para registrar una nueva posicion es aproximadamente 2m 
+          var deltaChange = 0.00002;
+          var deltaLat = position.coords.latitude - lastPoint.lat;
+          var deltaLon = position.coords.longitude - lastPoint.lon;
+          console.log("deltaLat: "+deltaLat+" deltaLon: "+deltaLon)
+          //comparo la diferncias en latitud y longitud y si es mayor a 2m agrego el nuevo punto, de lo contrario dejo el mismo punto
+          if((deltaLat>deltaChange)||(deltaLon>deltaChange)){
+            //console.log('pushiando ' + position.coords.latitude + ' , ' + position.coords.longitude);
+            positionsArray.push({lat: position.coords.latitude, lon: position.coords.longitude});
+          }else{
+            positionsArray.push(lastPoint);
+          } 
+        }
         //console.log('pushiando ' + position.coords.latitude + ' , ' + position.coords.longitude);
         positionsArray.push({lat: position.coords.latitude, lon: position.coords.longitude});
         // Se actualiza el arreglo de puntos cada vez
