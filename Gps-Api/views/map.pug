@@ -52,6 +52,7 @@ html
       var userRoutes = [];
       var positionsArray = [];
       var totalSeconds = 0;
+      var localIterations =0;
       //-------------------------------------------------------------------------
       /* Función para instanciar un mapa de Google maps 
          con centro en la ciudad de Medellín, Colombia
@@ -145,6 +146,7 @@ html
           xmlHttpRequest.send(JSON.stringify(jsonRequestMessage));
           // Se establece un timer para que cada segundo guarde la posición gps del usuario      
           totalSeconds = 0;
+          
           timerGps = setInterval(function(){ getPosition(); setTime();  }, 1000);
         }else{
           // Se da stop el timer
@@ -182,15 +184,22 @@ html
           //console.log('pushiando ' + position.coords.latitude + ' , ' + position.coords.longitude);
           positionsArray.push({lat: position.coords.latitude, lon: position.coords.longitude});
         }
-        // Se actualiza el arreglo de puntos cada vez
-        rutaBase['route']['points'] = positionsArray;
-        // Se construye request para actualizar la ruta en base de datos
-        var xmlHttpRequest = new XMLHttpRequest();
-        // se envía el request al endpoint de actualizar la ruta
-        xmlHttpRequest.open("PUT", "/api/route/" + rutaBase['route']['_id'], true);
-        xmlHttpRequest.setRequestHeader("Content-type", "application/json");
-        xmlHttpRequest.setRequestHeader('Authorization', jwtoken);
-        xmlHttpRequest.send(JSON.stringify(rutaBase));
+        
+        // como la funcion es cada segundo ponemos cuantos segundos queremos que tarde en pasar de local a DB 
+        if(localIterations<5){
+          localIterations ++;
+        }else{
+          localIterations =0;
+          // Se actualiza el arreglo de puntos cada vez
+          rutaBase['route']['points'] = positionsArray;
+          // Se construye request para actualizar la ruta en base de datos
+          var xmlHttpRequest = new XMLHttpRequest();
+          // se envía el request al endpoint de actualizar la ruta
+          xmlHttpRequest.open("PUT", "/api/route/" + rutaBase['route']['_id'], true);
+          xmlHttpRequest.setRequestHeader("Content-type", "application/json");
+          xmlHttpRequest.setRequestHeader('Authorization', jwtoken);
+          xmlHttpRequest.send(JSON.stringify(rutaBase));
+        }
       }
       //------------------------------------------------------------------------------------
       // Función que asigna el objeto recibido a la variable global ruta base
