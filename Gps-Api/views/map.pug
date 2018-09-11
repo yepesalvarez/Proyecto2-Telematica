@@ -26,7 +26,7 @@ html
           td
             div.btn-group-vertical
               button#iniciar.btn.btn-primary(onclick="updateGps('true')") Iniciar Ruta
-              button#finalizar.btn.btn-success(onclick="updateGps('false')") Finalizar Ruta
+              button#finalizar.btn.btn-success(onclick="endRoute()") Finalizar Ruta
         tr
           td      
             div.btn-group-vertical  
@@ -175,7 +175,9 @@ html
           console.log("deltaLat: "+deltaLat+" deltaLon: "+deltaLon)
           //comparo la diferncias en latitud y longitud y si es mayor a 2m agrego el nuevo punto, de lo contrario dejo el mismo punto
           if((deltaLat>deltaChange)||(deltaLon>deltaChange)){
-            //console.log('pushiando ' + position.coords.latitude + ' , ' + position.coords.longitude);
+            //la vieja posicion
+            positionsArray.push(lastPoint);
+            //la nueva posicion
             positionsArray.push({lat: position.coords.latitude, lon: position.coords.longitude});
           }else{
             positionsArray.push(lastPoint);
@@ -188,18 +190,26 @@ html
         // como la funcion es cada segundo ponemos cuantos segundos queremos que tarde en pasar de local a DB 
         if(localIterations<5){
           localIterations ++;
+          rutaBase['route']['points'] = positionsArray;
         }else{
           localIterations =0;
           // Se actualiza el arreglo de puntos cada vez
           rutaBase['route']['points'] = positionsArray;
-          // Se construye request para actualizar la ruta en base de datos
-          var xmlHttpRequest = new XMLHttpRequest();
-          // se envía el request al endpoint de actualizar la ruta
-          xmlHttpRequest.open("PUT", "/api/route/" + rutaBase['route']['_id'], true);
-          xmlHttpRequest.setRequestHeader("Content-type", "application/json");
-          xmlHttpRequest.setRequestHeader('Authorization', jwtoken);
-          xmlHttpRequest.send(JSON.stringify(rutaBase));
+          pushRouteDB();
         }
+      }
+      function pushRouteDB(){
+        // Se construye request para actualizar la ruta en base de datos
+        var xmlHttpRequest = new XMLHttpRequest();
+        // se envía el request al endpoint de actualizar la ruta
+        xmlHttpRequest.open("PUT", "/api/route/" + rutaBase['route']['_id'], true);
+        xmlHttpRequest.setRequestHeader("Content-type", "application/json");
+        xmlHttpRequest.setRequestHeader('Authorization', jwtoken);
+        xmlHttpRequest.send(JSON.stringify(rutaBase));
+      }
+      function endRoute(){
+        pushRouteDB();
+        updateGps('false');
       }
       //------------------------------------------------------------------------------------
       // Función que asigna el objeto recibido a la variable global ruta base
