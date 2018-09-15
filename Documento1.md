@@ -20,16 +20,16 @@ Se seleccionó la aplicación de Luis Fernando Yepes cuya estructura se analizó
 *Permite finalizar la ruta guardandola en base de datos
 *Permite ver rutas guardadas por el usuario activo en el sistema y visualizar los puntos en el mapa de la ruta consultada
 
-**Detalles técnicos del diseño e implementación funcional para el proyecto 2. : **
+**Detalles técnicos del diseño e implementación funcional para el proyecto 2. :**
 
 - Aplicación distribuida con arquitectura cliente servidor
 - Aplicación desarrollada con el patrón MVC (aplicación web)
 - [Diseño del sistema por componentes] : (https://goo.gl/8XLwHn) 
 
-**Aplicación completa desplegada en el Data Center Académico (tanto en servidores propios como en Kubernetes). **
+**Aplicación completa desplegada en el Data Center Académico (tanto en servidores propios como en Kubernetes).**
 Para proyecto 2 no se realizará despliegue en en DCA sino sobre AWS con acceso mediante un dominio www personalizado
 
-* Definición de Tecnología v1 – Infraestructura TI: Servidores, Software Base, Redes, etc: 
+**Definición de Tecnología v1 – Infraestructura TI: Servidores, Software Base, Redes, etc:**
 - La aplicación está desarrollada en nodeJs con el framework Express para el backend y con Pug(Jade 2) para el front end. Utiliza la API de Google Maps para el pintado del mapa y marcadores. La persistencia de datos se hace en base de datos no relacional Mongo. El web server que contiene la app es Nginx
 - La aplicación corre sobre contenedor Docker el cual se encarga de instalar y hacer disponibles todos los componentes de configuración necesarios mencionados en el inciso anterior
 - La aplicación será montada en varias instancias de la t2.micro de AWS
