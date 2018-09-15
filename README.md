@@ -1,9 +1,9 @@
 # Proyecto2-Telematica
 Proyecto académico de la universidad EAFIT. Asignatura Tópicos Especiales en Telemática. Sistema de registro de rutas GPS
 
-# Ver Proyecto en DCA Eafit
+# Ver Proyecto en AWS
 basta con ingresar a 
-``` https://lyepesa.dis.eafit.edu.co/ ```
+``` http://www.proyecto2.ga/ ```
 
 # Montar proyecto en servidor Centos
 Instalar Docker y docker compose
