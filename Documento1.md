@@ -14,11 +14,11 @@
 Se seleccionó la aplicación de Luis Fernando Yepes cuya estructura se analizó como la más simple y el alcance restante más fácil de culminar allí
 
 **Descripción de la aplicación (requisitos funcionales)**
-*La aplicación permite crear usuarios e ingresar al sistema con usuarios creados
-*Muestra el mapa de google centrado en la ciudad de Medellín Colombia
-*Permite iniciar una ruta a la cual se asocian por segundo los puntos de ubicación del usuario
-*Permite finalizar la ruta guardandola en base de datos
-*Permite ver rutas guardadas por el usuario activo en el sistema y visualizar los puntos en el mapa de la ruta consultada
+* La aplicación permite crear usuarios e ingresar al sistema con usuarios creados
+* Muestra el mapa de google centrado en la ciudad de Medellín Colombia
+* Permite iniciar una ruta a la cual se asocian por segundo los puntos de ubicación del usuario
+* Permite finalizar la ruta guardandola en base de datos
+* Permite ver rutas guardadas por el usuario activo en el sistema y visualizar los puntos en el mapa de la ruta consultada
 
 **Detalles técnicos del diseño e implementación funcional para el proyecto 2. :**
 
