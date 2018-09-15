@@ -1,8 +1,9 @@
-## Definición del equipo, proyecto y aplicación
+### Definición del equipo, proyecto y aplicación
 
 **Miembros del equipo y asignación de QA a miembros del equipo**
 
-``` 		QA1: 	Disponibilidad  		Estudiante: Jorge Andres Hoyos Gomez
+``` 		
+		QA1: 	Disponibilidad  		Estudiante: Jorge Andres Hoyos Gomez
 
 		QA2: 	Rendimiento			Estudiante: Santiago Ramón Alvarez Gomez
 		
