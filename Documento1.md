@@ -24,7 +24,7 @@ Se seleccionó la aplicación de Luis Fernando Yepes cuya estructura se analizó
 
 - Aplicación distribuida con arquitectura cliente servidor
 - Aplicación desarrollada con el patrón MVC (aplicación web)
-- [Diseño del sistema por componentes] : (https://goo.gl/8XLwHn) 
+- Diseño del sistema por componentes : https://goo.gl/8XLwHn
 
 **Aplicación completa desplegada en el Data Center Académico (tanto en servidores propios como en Kubernetes).**
 Para proyecto 2 no se realizará despliegue en en DCA sino sobre AWS con acceso mediante un dominio www personalizado
