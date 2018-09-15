@@ -1,4 +1,4 @@
-#Definición del equipo, proyecto y aplicación
+## Definición del equipo, proyecto y aplicación
 
 **Miembros del equipo y asignación de QA a miembros del equipo**
 
@@ -21,18 +21,18 @@ Se seleccionó la aplicación de Luis Fernando Yepes cuya estructura se analizó
 
 **Detalles técnicos del diseño e implementación funcional para el proyecto 2. : **
 
--Aplicación distribuida con arquitectura cliente servidor
--Aplicación desarrollada con el patrón MVC (aplicación web)
--[Diseño del sistema por componentes] : (https://goo.gl/8XLwHn) 
+- Aplicación distribuida con arquitectura cliente servidor
+- Aplicación desarrollada con el patrón MVC (aplicación web)
+- [Diseño del sistema por componentes] : (https://goo.gl/8XLwHn) 
 
 **Aplicación completa desplegada en el Data Center Académico (tanto en servidores propios como en Kubernetes). **
 Para proyecto 2 no se realizará despliegue en en DCA sino sobre AWS con acceso mediante un dominio www personalizado
 
 * Definición de Tecnología v1 – Infraestructura TI: Servidores, Software Base, Redes, etc: 
--La aplicación está desarrollada en nodeJs con el framework Express para el backend y con Pug(Jade 2) para el front end. Utiliza la API de Google Maps para el pintado del mapa y marcadores. La persistencia de datos se hace en base de datos no relacional Mongo. El web server que contiene la app es Nginx
--La aplicación corre sobre contenedor Docker el cual se encarga de instalar y hacer disponibles todos los componentes de configuración necesarios mencionados en el inciso anterior
--La aplicación será montada en varias instancias de la t2.micro de AWS
--Se utilizará para el despliegue una sección de red privada de Amazon de la localidad de Ohio VPC (Virtual private cloud) con diferentes subredes (subnets) donde en cada una se construirán instancias (EC2) que albergarán la aplicación. Estas instancias dirigidas por un balanceador de carga implementado desde los servicios de AWS que responde a un dominio personalizado www
+- La aplicación está desarrollada en nodeJs con el framework Express para el backend y con Pug(Jade 2) para el front end. Utiliza la API de Google Maps para el pintado del mapa y marcadores. La persistencia de datos se hace en base de datos no relacional Mongo. El web server que contiene la app es Nginx
+- La aplicación corre sobre contenedor Docker el cual se encarga de instalar y hacer disponibles todos los componentes de configuración necesarios mencionados en el inciso anterior
+- La aplicación será montada en varias instancias de la t2.micro de AWS
+- Se utilizará para el despliegue una sección de red privada de Amazon de la localidad de Ohio VPC (Virtual private cloud) con diferentes subredes (subnets) donde en cada una se construirán instancias (EC2) que albergarán la aplicación. Estas instancias dirigidas por un balanceador de carga implementado desde los servicios de AWS que responde a un dominio personalizado www
 
 **Marco-referencia-v1: Van a realizar un 1er resumen y apropiación de las bases conceptuales, patrones, mejores prácticas, etc de los atributos de calidad seleccionados.**
 
