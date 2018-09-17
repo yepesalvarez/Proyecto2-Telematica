@@ -14,7 +14,7 @@ Definición de Tecnología de Desarrollo
 
 **URLs de repositorio (github)**
 * Proyecto 2 con QA Rendimiento https://github.com/yepesalvarez/Proyecto2-Telematica
-* Proyecto 2 con QA Seguridad https://github.com/yepesalvarez/Proyecto1-Telematica.git
+* Proyecto 2 con QA Seguridad https://github.com/yepesalvarez/Proyecto1-Telematica
 
 **Definición de Tecnología v3 – Infraestructura TI: Servidores, Software Base, Redes, etc.**
 
