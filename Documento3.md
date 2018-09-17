@@ -48,21 +48,21 @@ Se pasó de un tiempo de respuesta de 8.5 segundos a un tiempo de respuesta 0.9 
 Resultado: todo correcto!
 
 * Luego de la implentación de Auth0 se comprobó que las políticas de contraseña configuradas si respondieran dentro de la aplicación:
-https://goo.gl/sdKjuo
-https://goo.gl/A8L4Nn
-https://goo.gl/TGDzPP
-https://goo.gl/KDH8RL
+* https://goo.gl/sdKjuo
+* https://goo.gl/A8L4Nn
+* https://goo.gl/TGDzPP
+* https://goo.gl/KDH8RL
 Resultado: todo correcto!
 
 * Se realizó un anáisis de seguridad de la aplicación web mediante Owasp ZAP : 
-https://goo.gl/kZwE5q
+* https://goo.gl/kZwE5q
 Se encontraron 5 vulnerabilidades, una ya detectada durante el análisis realizado en el documento #1 correspondiente a XSS (Cross-site scripting), esto, porque no se alcanzó a implementar el plugin correspondiente para proteger el front end. Adicionalmente algunas vulnerabilidades en el manejo de cookies para el sitio por http. Imágenes evidencia:
-https://goo.gl/rx5iUh
-https://goo.gl/f9xQSH
-https://goo.gl/uyZVCK
-https://goo.gl/pud8iK
-https://goo.gl/G5fZe8
-https://goo.gl/7Xw2wx
+* https://goo.gl/rx5iUh
+* https://goo.gl/f9xQSH
+* https://goo.gl/uyZVCK
+* https://goo.gl/pud8iK
+* https://goo.gl/G5fZe8
+* https://goo.gl/7Xw2wx
 El análisis también arroja las soluciones posibles que se pueden implementar para proteger aún más el sitio, sin embargo a lo sumo solo hubo una amenaza nivel medio lo cual muestra que el sitio es bastante seguro.
 
 **Marco-referencia-v3: Versión final de las bases conceptuales, patrones, mejores prácticas, etc de los atributos de calidad seleccionados.**
