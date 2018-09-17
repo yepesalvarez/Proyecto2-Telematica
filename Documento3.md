@@ -48,10 +48,10 @@ Se pasó de un tiempo de respuesta de 8.5 segundos a un tiempo de respuesta 0.9 
 Resultado: todo correcto!
 
 * Luego de la implentación de Auth0 se comprobó que las políticas de contraseña configuradas si respondieran dentro de la aplicación:
-* https://goo.gl/sdKjuo
-* https://goo.gl/A8L4Nn
-* https://goo.gl/TGDzPP
-* https://goo.gl/KDH8RL
+* https://goo.gl/sdKjuo (Contraseña con complejidad alta)
+* https://goo.gl/A8L4Nn (Contraseña no igual a las últinas 5 anteriores, contraseña sin palabras del diccionario de passw comunes)
+* https://goo.gl/TGDzPP (Contraseña no igual a las anteriores)
+* https://goo.gl/KDH8RL (prueba en aplicación en producción)
 Resultado: todo correcto!
 
 * Se realizó un anáisis de seguridad de la aplicación web mediante Owasp ZAP : 
