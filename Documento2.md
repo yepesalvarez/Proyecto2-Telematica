@@ -85,3 +85,5 @@ Para implementar de manera correcta el concepto de una ruta trazada por puntos, 
 * Mantenimiento correctivo: Esta es una forma reactiva de mantener el hardware en donde el equipo de operaciones de producción y mantenimiento identificará la causa raíz y la solución los problemas después de que ocurran.
 * Mantenimiento preventivo: Una manera mas elegante de sostener la infraestructura, es a través de monitoreo los componentes de hardware y tomar acciones para evitar incidentes.
 * Mantenimiento perfectivo: No siempre son necesarios, pero ayudan a que el usuario tenga una mejor experiencia con la aplicación, como por ejemplo incrementar el hardware, para que los tiempos de espera sean mas cortos.
+
+Se conservan los demás puntos tratados en Documento #1
