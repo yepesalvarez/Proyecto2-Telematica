@@ -22,12 +22,12 @@ Vistas de arquitectura:
 
 **Seguridad:**
 
-*Encriptar información sensible almacenada en base de datos como contraseñas
-*Encriptar paquetes que viajan por la red mediante el uso de HTTPS con certificado ssl
-*APIs de la aplicación protegidas por middleware de autorización 
-*Uso de APIs externas e IaaS seguras y confiables
-*Almacenar de manera segura y oculta los tokens de autorización de usuario
-*Chequeo frecuente a vulnerabilidades presentes en el sistema
+* Encriptar información sensible almacenada en base de datos como contraseñas
+* Encriptar paquetes que viajan por la red mediante el uso de HTTPS con certificado ssl
+* APIs de la aplicación protegidas por middleware de autorización 
+* Uso de APIs externas e IaaS seguras y confiables
+* Almacenar de manera segura y oculta los tokens de autorización de usuario
+* Chequeo frecuente a vulnerabilidades presentes en el sistema
 
 **Disponibilidad:**
 	
