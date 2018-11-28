@@ -3,7 +3,7 @@ Proyecto académico de la universidad EAFIT. Asignatura Tópicos Especiales en T
 
 # Ver Proyecto en AWS
 basta con ingresar a 
-``` http://www.proyecto2.ga/ ```
+``` http://www.proyecto2.ga/ ``` (It's currently off)
 
 # Montar proyecto en servidor Centos
 Instalar Docker y docker compose
